@@ -4,24 +4,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="bootstrap-4.4.1/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="fontawesome-free-5.14.0-web/css/all.min.css" />
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+    crossorigin="anonymous"
+  />
 
-  <title>Atividade 01</title>
+  <title>Busca de animes</title>
 </head>
 <body class="bg-dark text-light text-center">
   <div class="container">
     <header class="stick-top">
-      <h2>Encontrador de Animes</h2>
+      <h2>Busca de Animes</h2>
       <div class="row">
         <div class="col-sm-4">Nathan da Silva Reis</div>
         <div class="col-sm-4">082170036</div>
         <div class="col-sm-4">EC7</div>
       </div>
-      <p>
-        <span class="fas fa-hand-point-right mr-2"></span>
-        <a target="_blank" href="https://kitsu.docs.apiary.io/#introduction/json:api/filtering-and-search">Documentação da API</a>
-      </p>
     </header>
 
     <main class="mt-5">
@@ -32,11 +32,17 @@
               <label for="categoria">Categoria</label>
               <select class="form-control" id="categoria">
                 <option value="">Escolha uma opção...</option>
-                <option value="adventure">Aventura</option>
-                <option value="ecchi">Ecchi</option>
+                <option value="Martial Arts">Artes marciais</option>
+                <option value="Assassin">Assassino</option>
+                <option value="Adventure">Aventura</option>
+                <option value="Cooking">Culinária</option>
+                <option value="Magic">Magia</option>
+                <option value="Robot">Robo</option>
+                <option value="Samurai">Samurai</option>
               </select>
             </div>
           </div>
+
           <div class="col">
             <div class="form-group">
               <label for="titulo">Titulo</label>
@@ -49,99 +55,42 @@
       </form>
 
       <div class="row mt-5" id="resultados"></div>
+
+      <nav class="d-flex justify-content-center">
+        <ul class="pagination">
+          <li class="page-item">
+            <a id="primeira-pagina" class="page-link text-dark" href="#">Primeira</a>
+          </li>
+          <li class="page-item">
+            <a id="pagina-anterior" class="page-link text-dark" href="#">Anterior</a>
+          </li>
+          <li class="page-item">
+            <a id="proxima-pagina" class="page-link text-dark" href="#">Próxima</a>
+          </li>
+          <li class="page-item">
+            <a id="ultima-pagina" class="page-link text-dark" href="#">Última</a>
+          </li>
+        </ul>
+      </nav>
     </main>
   </div>
 
-  <script src="jquery-3.4.1/jquery-3.4.1.min.js"></script>
-  <script src="bootstrap-4.4.1/js/bootstrap.bundle.min.js"></script>
-  <script src="bootstrap-4.4.1/js/bootstrap.min.js"></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"
+  ></script>
 
-  <script>
-    const formulario = document.getElementById('formulario');
-    formulario.addEventListener('submit', filtrar, false);
-
-    function exibirRetorno(animes) {
-      const divResultados = document.getElementById('resultados');
-      divResultados.innerHTML = '';
-
-      animes.forEach((anime) => {
-        const atributos = anime.attributes;
-        const card = montarCard(atributos);
-
-        divResultados.appendChild(card);
-      });
-    }
-
-    function fazerRequisicao(categoria, titulo) {
-      const uri = montarURI(categoria, titulo);
-      const parametrosRequisicao = {
-        "method": "GET",
-        "headers": {
-          "Accept": "application/vnd.api+json",
-          "content-type": "application/vnd.api+json"
-        }
-      };
-
-      fetch(uri, parametrosRequisicao)
-        .then(resposta => resposta.json())
-        .then(resposta => exibirRetorno(resposta.data))
-        .catch(erro => console.log(erro));
-    }
-
-    function filtrar(event) {
-      event.preventDefault();
-
-      const categoria = document.getElementById('categoria').value.trim();
-      const titulo = document.getElementById('titulo').value.trim();
-
-      fazerRequisicao(categoria, titulo);
-    }
-
-    function montarURI(categoria, titulo) {
-      let uri = 'https://kitsu.io/api/edge/anime?page[limit]=20';
-
-      if(categoria) {
-        uri += '&filter[categories]=' + categoria;
-        temFiltro = true;
-      }
-
-      if(titulo) {
-        uri += '&filter[text]=' + titulo;
-      }
-
-      return uri;
-    }
-  
-    function montarCard(atributos) {
-      const card = document.createElement('div');
-      card.classList.add('card');
-      card.classList.add('col-md-4');
-      card.classList.add('col-sm-6');
-      card.classList.add('mb-5');
-      card.classList.add('bg-transparent');
-
-      const image = document.createElement('img');
-      image.classList.add('card-img-top');
-      if(atributos.coverImage) {
-        image.src = atributos.coverImage.original;
-      } else {
-        image.src = "https://images.unsplash.com/photo-1599508704512-2f19efd1e35f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=375&q=80";
-      }
-
-      card.appendChild(image);
-
-      const cardBody = document.createElement('div');
-      cardBody.classList.add('card-body');
-
-      const titulo = document.createElement('h4');
-      titulo.innerHTML = atributos.canonicalTitle;
-
-      cardBody.appendChild(titulo);
-
-      card.appendChild(cardBody);
-
-      return card;
-    }
-  </script>
+  <script src="js/index.js"></script>
 </body>
 </html>
